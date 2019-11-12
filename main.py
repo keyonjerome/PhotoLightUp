@@ -17,7 +17,7 @@ def runLEDsInSequence(LEDs):
         GPIO.output(i,False)
     
 def button_callback(channel):
-    print("Button was pushed!")
+    start_playback(events)
     
 def play_sound(file_path):
     pygame.mixer.music.load(file_path)
@@ -31,6 +31,9 @@ def start_playback(playback_events):
         GPIO.output(event[0],True)
         time.sleep(event[1])
         GPIO.output(event[0],False)
+    print("Cleaning up/turning off all LEDS.")
+    GPIO.cleanup()
+    
         
 # define all LEDs
 LED1 = 7
@@ -86,7 +89,8 @@ print("Button setup complete!")
 
 print("Current button state:",GPIO.input(button))
 #runLEDsInSequence(allLEDs)
-start_playback(events)
-print("Cleaning up/turning off all LEDS.")
-GPIO.cleanup()
+while True:
+    pass
+#start_playback(events)
+
 

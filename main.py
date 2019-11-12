@@ -22,33 +22,52 @@ def button_callback(channel):
 def play_sound(file_path):
     pygame.mixer.music.load(file_path)
     pygame.mixer.music.play()
-    print("pygame mixer:",pygame.mixer.get_busy())
-    while pygame.mixer.get_busy() == 0:
-        pass
 
+def start_playback(playback_events):
+    print("this workin?")
+    play_sound("voice.mp3")
+    for event in playback_events:
+        print("outputting")
+        GPIO.output(event[0],True)
+        time.sleep(event[1])
+        GPIO.output(event[0],False)
+        
 # define all LEDs
 LED1 = 7
-LED2 = 11
-LED3 = 12
-LED4 = 13
-LED5 = 15
-LED6 = 16 #unsure of port
-LED7 = 18 #unsure of port
-LED8 = -1 #unsure of port
+LED2 = 8
+LED3 = 11
+LED4 = 12
+LED5 = 13
+LED6 = 15 
+LED7 = 16 
+LED8 = 18
+
+juan_water = 7
+juan_fight = 8 
+juan_look = 18
+juan_marry = 16
+
+keyon_water = 11
+keyon_fight = 12
+keyon_look = 13 
+keyon_marry = 15
+
+
 
 events = [
-    (LED1,2),
-    (LED2,2),
-    (LED3,2),
-    (LED4,2),
-    (LED5,2),
-    (LED6,2),
-    (LED7,2),
-    (LED8,2)]
+    (juan_marry,2.25),
+    (keyon_marry,3),
+    (keyon_fight,3),
+    (juan_fight,3),
+    (juan_water,4),
+    (keyon_water,5),
+    (keyon_look,2),
+    (juan_look,2),
+    (keyon_look,5)]
     
 button = 10
 
-allLEDs = [LED1,LED2,LED3,LED4,LED5]
+allLEDs = [LED1,LED2,LED3,LED4,LED5,LED6,LED7,LED8]
 
 # set up GPIO module
 GPIO.setmode(GPIO.BOARD)
@@ -56,7 +75,6 @@ GPIO.setmode(GPIO.BOARD)
 # set up pygame audio player
 pygame.mixer.init()
 pygame.mixer.music.set_volume(1.0)
-play_sound("voice.mp3")
 
 for LED in allLEDs:
     GPIO.setup(LED, GPIO.OUT)
@@ -67,8 +85,8 @@ GPIO.add_event_detect(button,GPIO.RISING,callback=button_callback)
 print("Button setup complete!")
 
 print("Current button state:",GPIO.input(button))
-runLEDsInSequence(allLEDs)
-
+#runLEDsInSequence(allLEDs)
+start_playback(events)
 print("Cleaning up/turning off all LEDS.")
 GPIO.cleanup()
 

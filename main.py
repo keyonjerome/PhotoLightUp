@@ -18,6 +18,13 @@ def runLEDsInSequence(LEDs):
     
 def button_callback(channel):
     print("Button was pushed!")
+    
+def play_sound(file_path):
+    pygame.mixer.music.load(file_path)
+    pygame.mixer.music.play()
+    print("pygame mixer:",pygame.mixer.get_busy())
+    while pygame.mixer.get_busy() == 0:
+        pass
 
 # define all LEDs
 LED1 = 7
@@ -30,20 +37,26 @@ LED7 = 18 #unsure of port
 LED8 = -1 #unsure of port
 
 events = [
-    (LED1,""),
-    (LED2,""),
-    (LED3,""),
-    (LED4,""),
-    (LED5,""),
-    (LED6,""),
-    (LED7,""),
-    (LED8,"")]
+    (LED1,2),
+    (LED2,2),
+    (LED3,2),
+    (LED4,2),
+    (LED5,2),
+    (LED6,2),
+    (LED7,2),
+    (LED8,2)]
     
 button = 10
 
 allLEDs = [LED1,LED2,LED3,LED4,LED5]
 
+# set up GPIO module
 GPIO.setmode(GPIO.BOARD)
+
+# set up pygame audio player
+pygame.mixer.init()
+pygame.mixer.music.set_volume(1.0)
+play_sound("voice.mp3")
 
 for LED in allLEDs:
     GPIO.setup(LED, GPIO.OUT)
